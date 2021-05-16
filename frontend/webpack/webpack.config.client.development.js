@@ -5,7 +5,7 @@ import fs from 'fs';
 import merge from 'webpack-merge';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-
+import ESLintPlugin from 'eslint-webpack-plugin';
 
 import config from '../src/config';
 import getBaseConfig from './webpack.config.client';
@@ -31,7 +31,7 @@ const devConfig = {
 
   module: {
     rules: [
-      
+     
       {
         test: /\.scss$/,
         use: [
@@ -103,6 +103,7 @@ const devConfig = {
 
   plugins: [
     new MiniCssExtractPlugin(),
+    new ESLintPlugin(),
     new CopyWebpackPlugin([
       'src/shared/images/favicon.png',
       'src/shared/images/webrecorder-social.png'
