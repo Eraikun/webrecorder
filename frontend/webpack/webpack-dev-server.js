@@ -31,12 +31,12 @@ const app = new Express();
 //app.use(require('webpack-dev-middleware')(compiler, serverOptions));
 //app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(webpackDevMiddleware(compiler, {stats: { colors: true },headers: { 'Access-Control-Allow-Origin': '*' },contentBase: `http://${host}:${port}`,publicPath:webpackConfig.output.publicPath,serverSideRender:true}));
+app.use(webpackDevMiddleware(compiler, {stats: { colors: true },headers: { 'Access-Control-Allow-Origin': '*' },contentBase: `http://${host}:${port}`,publicPath:webpackConfig.output.publicPath,serverSideRender:true, hot: true, overlay: false	}));
 app.use(webpackHotMiddleware(compiler));
 app.listen(port, (err) => {
   if (err) {
     console.error(err);
   } else {
-    console.info('==> 🚧  My HotReload Webpack development server listening on port %s', port);
+    console.info('==> 🚧  My OverlayFalse HotReload Webpack development server listening on port %s', port);
   }
 });
