@@ -12,6 +12,8 @@ import ApiClient from './helpers/ApiClient';
 import baseRoute from './baseRoute';
 import Root from './root';
 
+//import './bootstrap/css/bootstrap.min.css';
+//import './bootstrap/js/bootstrap.min.js';
 import './base.scss';
 
 

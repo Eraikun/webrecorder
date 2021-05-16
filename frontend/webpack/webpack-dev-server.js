@@ -10,7 +10,7 @@ const host = process.env.APP_HOST || '127.0.0.1';
 const port = (Number(process.env.FRONTEND_PORT) + 1) || 8096;
 
 const serverOptions = {
-  contentBase: `https://${host}:${port}`,
+  contentBase: `http://${host}:${port}`,
   quiet: true,
   noInfo: true,
   inline: true,

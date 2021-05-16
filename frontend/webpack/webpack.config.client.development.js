@@ -4,6 +4,8 @@ import CircularDependencyPlugin from 'circular-dependency-plugin';
 import fs from 'fs';
 import merge from 'webpack-merge';
 import webpack from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
 
 import config from '../src/config';
 import getBaseConfig from './webpack.config.client';
@@ -20,7 +22,7 @@ const devConfig = {
   mode: 'development',
   entry: {
     main: [
-      `webpack-hot-middleware/client?path=https://${host}:${port}/__webpack_hmr&quiet=true`,
+      `webpack-hot-middleware/client?path=http://${host}:${port}/__webpack_hmr&quiet=true`,
       './config/polyfills',
       'bootstrap-loader',
       './src/client.js'
@@ -29,16 +31,7 @@ const devConfig = {
 
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.(js|jsx)?$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-        options: {
-          cache: true,
-          quiet: true
-        }
-      },
+      
       {
         test: /\.scss$/,
         use: [
@@ -105,10 +98,11 @@ const devConfig = {
   },
 
   output: {
-    publicPath: `https://${host}:${port}${baseConfig.output.publicPath}`
+    publicPath: `http://${host}:${port}${baseConfig.output.publicPath}`
   },
 
   plugins: [
+    new MiniCssExtractPlugin(),
     new CopyWebpackPlugin([
       'src/shared/images/favicon.png',
       'src/shared/images/webrecorder-social.png'
