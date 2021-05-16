@@ -1,6 +1,9 @@
 import Express from 'express';
 import webpack from 'webpack';
 
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+
 import webpackConfig from './webpack.config.client.development';
 
 
@@ -25,13 +28,15 @@ const serverOptions = {
 
 const app = new Express();
 
-app.use(require('webpack-dev-middleware')(compiler, serverOptions));
-app.use(require('webpack-hot-middleware')(compiler));
+//app.use(require('webpack-dev-middleware')(compiler, serverOptions));
+//app.use(require('webpack-hot-middleware')(compiler));
 
+app.use(webpackDevMiddleware(compiler, {publicPath:webpackConfig.output.publicPath,serverSideRender:true}));
+app.use(webpackHotMiddleware(compiler));
 app.listen(port, (err) => {
   if (err) {
     console.error(err);
   } else {
-    console.info('==> 🚧  Webpack development server listening on port %s', port);
+    console.info('==> 🚧  My HotReload Webpack development server listening on port %s', port);
   }
 });
