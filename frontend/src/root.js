@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter } from 'react-router-dom';
-import { MemoryRouter } from 'react-router';
+//import { MemoryRouter } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-connect';
 
 
 function Root(props) {
   const { client, routes } = props;
 
-  return __DESKTOP__ ?
-    (
-      <MemoryRouter>
-        <ReduxAsyncConnect routes={routes} helpers={{ client }} />
-      </MemoryRouter>
-    ) :
+  return 
     (
       <BrowserRouter>
         <ReduxAsyncConnect routes={routes} helpers={{ client }} />
