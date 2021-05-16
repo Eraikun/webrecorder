@@ -42,7 +42,7 @@ from webrecorder.webreccork import WebRecCork
 from webrecorder.session import Session, RedisSessionMiddleware
 
 from webrecorder.models.access import SessionAccessCache
-from webrecorder.models.ldap_usermanager import LdapUserManager as UserManager
+from webrecorder.models.usermanager import UserManager
 from webrecorder.models.datshare import DatShare
 
 from webrecorder.rec.storage import storagepaths
