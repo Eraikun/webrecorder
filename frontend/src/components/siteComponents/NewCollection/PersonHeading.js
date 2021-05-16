@@ -8,9 +8,9 @@ class PersonHeading extends Component {
     item: PropTypes.object,
     onRemovePerson: PropTypes.func,
   };
-  constructor(props) {
+  /*constructor(props) {
     super(props);
-  }
+  }*/
   onRemovePerson = () => {
     const { onRemovePerson, item } = this.props;
     onRemovePerson(item);
