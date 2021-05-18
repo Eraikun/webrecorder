@@ -18,7 +18,7 @@ const serverOptions = {
   noInfo: true,
   inline: true,
   publicPath: webpackConfig.output.publicPath,
-  headers: { 'Access-Control-Allow-Origin': '*' },
+  headers: { 'Access-Control-Allow-Origin': '*', 'default-src': 'unsafe inline' },
   stats: { colors: true },
   watchOptions: {
     aggregateTimeout: 300,

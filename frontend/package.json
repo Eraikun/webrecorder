@@ -66,6 +66,7 @@
     "exports-loader": "^0.6.4",
     "escape-regexp": "^0.0.1",
     "express": "^4.16.4",
+    "file-loader": "^2.0.0",
     "filesize": "3.6.1",
     "gzip-size": "5.0.0",
     "hard-source-webpack-plugin": "^0.12.0",
