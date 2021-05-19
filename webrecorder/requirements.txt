@@ -10,6 +10,3 @@ har2warc>=1.0.4
 fakeredis<1.0
 apispec<1.0
 psutil
-gevent==20.9.0
-greenlet==0.4.17
-python-ldap

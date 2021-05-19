@@ -1,7 +1,6 @@
 import autoprefixer from 'autoprefixer';
 import merge from 'webpack-merge';
 import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import { port } from '../src/config';
 import baseConfig from './webpack.config.server';

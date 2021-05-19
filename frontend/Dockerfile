@@ -1,4 +1,4 @@
-FROM node:10.18.0
+FROM node:10.6.0
 
 ENV TERM=xterm APP=/code
 
@@ -23,6 +23,6 @@ ADD src $APP/
 
 WORKDIR $APP
 
-RUN npm install --global --force yarn
+RUN npm install --global yarn
 
-RUN rm -rf node_modules && yarn add file-loader && yarn add eslint-webpack-plugin && yarn add url-loader && yarn add mini-css-extract-plugin && yarn add react-tooltip && yarn install && yarn cache clean && rm -rf ~/tmp/*
+RUN rm -rf node_modules && yarn install && yarn cache clean && rm -rf ~/tmp/*

@@ -1,22 +1,18 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-return-assign */
-/* eslint-disable react/button-has-type */
-/* eslint-disable indent */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Toggle from 'react-toggle';
-import { Alert, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Toggle from "react-toggle";
+import { Alert, ControlLabel, FormGroup, FormControl } from "react-bootstrap";
 
-import { defaultCollectionTitle } from 'config';
-import { collection } from 'helpers/userMessaging';
+import { defaultCollectionTitle } from "config";
+import { collection } from "helpers/userMessaging";
 
-import Modal from 'components/Modal';
+import Modal from "components/Modal";
 
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from "react-tooltip";
 
-import './style.scss';
+import "./style.scss";
 
-const creatorLegend = ['corporate/institutional name', 'personal name'];
+const creatorLegend = ["corporate/institutional name", "personal name"];
 const creatorList = [];
 const subjectHeaderList = [];
 const personHeaderList = [];
@@ -37,60 +33,60 @@ class ReviewMetadata extends Component {
 
     this.state = {
       listID: 0,
-      publisher: '',
-      publisherOriginal: '',
+      publisher: "",
+      publisherOriginal: "",
       subjectHeaderList,
-      subjectHeadingText: '',
+      subjectHeadingText: "",
       personHeaderList,
-      personHeadingText: '',
-      collTitle: '',
-      title: '',
-      pubTitleOriginal: '',
-      collYear: '',
-      copTitle: '',
-      surName: '',
-      persName: '',
-      usermail: '',
+      personHeadingText: "",
+      collTitle: "",
+      title: "",
+      pubTitleOriginal: "",
+      collYear: "",
+      copTitle: "",
+      surName: "",
+      persName: "",
+      usermail: "",
       creatorList,
       isPublic: false,
       creatorLegend,
-      noteToDachs: '',
-      publishYear: '',
-      selectedGroupName: 'corporate/institutional name',
-      url: '',
-      ticketState: 'open',
+      noteToDachs: "",
+      publishYear: "",
+      selectedGroupName: "corporate/institutional name",
+      url: "",
+      ticketState: "open",
       isCollLoaded: true,
-      recordingUrl: '',
-      recordingTimestamp: '',
+      recordingUrl: "",
+      recordingTimestamp: "",
     };
   }
 
   componentDidMount(prevProps) {
     const self = this;
-    const promise1 = new Promise(((resolve, reject) => {
-      console.log(self.props.coll.get('personHeaderList'));
-      const didSucceed = JSON.parse(
-        self.props.coll.get('personHeaderList').replace(/'/g, '"')
+    const promise1 = new Promise(function (resolve, reject) {
+      console.log(self.props.coll.get("personHeaderList"));
+      var didSucceed = JSON.parse(
+        self.props.coll.get("personHeaderList").replace(/'/g, '"')
       );
       resolve(didSucceed);
-    }));
-    const promise2 = new Promise(((resolve, reject) => {
-      console.log(self.props.coll.get('subjectHeaderList'));
-      const didSucceed = JSON.parse(
-        self.props.coll.get('subjectHeaderList').replace(/'/g, '"')
+    });
+    const promise2 = new Promise(function (resolve, reject) {
+      console.log(self.props.coll.get("subjectHeaderList"));
+      var didSucceed = JSON.parse(
+        self.props.coll.get("subjectHeaderList").replace(/'/g, '"')
       );
       resolve(didSucceed);
-    }));
-    const promise3 = new Promise(((resolve, reject) => {
-      console.log(self.props.coll.get('creatorList'));
-      const didSucceed = JSON.parse(
-        self.props.coll.get('creatorList').replace(/'/g, '"')
+    });
+    const promise3 = new Promise(function (resolve, reject) {
+      console.log(self.props.coll.get("creatorList"));
+      var didSucceed = JSON.parse(
+        self.props.coll.get("creatorList").replace(/'/g, '"')
       );
       resolve(didSucceed);
-    }));
+    });
 
     Promise.all([promise1, promise2, promise3])
-      .then((values) => {
+      .then(function (values) {
         self.setState((state) => {
           return {
             personHeaderList: values[0],
@@ -99,31 +95,30 @@ class ReviewMetadata extends Component {
           };
         });
       })
-      .catch(err => console.log(`There was an error:${err}`));
+      .catch((err) => console.log("There was an error:" + err));
 
     this.setState((state) => {
       return {
-        listID: this.props.coll.get('listID'),
-        publisher: this.props.coll.get('publisher'),
-        publisherOriginal: this.props.coll.get('publisherOriginal'),
-        subjectHeadingText: this.props.coll.get('subjectHeadingText'),
-        personHeadingText: this.props.coll.get('personHeadingText'),
-        collTitle: this.props.coll.get('collTitle'),
-        title: this.props.coll.get('title'),
-        pubTitleOriginal: this.props.coll.get('pubTitleOriginal'),
-        collYear: this.props.coll.get('collYear'),
-        copTitle: this.props.coll.get('copTitle'),
-        noteToDachs: this.props.coll.get('noteToDachs'),
-        surName: this.props.coll.get('surName'),
-        persName: this.props.coll.get('persName'),
-        usermail: this.props.coll.get('usermail'),
-        publishYear: this.props.coll.get('publishYear'),
-        selectedGroupName: 'corporate/institutional name',
-        url: this.props.coll.get('url'),
+        listID: this.props.coll.get("listID"),
+        publisher: this.props.coll.get("publisher"),
+        publisherOriginal: this.props.coll.get("publisherOriginal"),
+        subjectHeadingText: this.props.coll.get("subjectHeadingText"),
+        personHeadingText: this.props.coll.get("personHeadingText"),
+        collTitle: this.props.coll.get("collTitle"),
+        title: this.props.coll.get("title"),
+        pubTitleOriginal: this.props.coll.get("pubTitleOriginal"),
+        collYear: this.props.coll.get("collYear"),
+        copTitle: this.props.coll.get("copTitle"),
+        noteToDachs: this.props.coll.get("noteToDachs"),
+        surName: this.props.coll.get("surName"),
+        persName: this.props.coll.get("persName"),
+        usermail: this.props.coll.get("usermail"),
+        publishYear: this.props.coll.get("publishYear"),
+        selectedGroupName: "corporate/institutional name",
+        url: this.props.coll.get("url"),
       };
     });
   }
-
   checkEmail = () => {
     this.setState({ checkEmail: true });
   };
@@ -135,10 +130,9 @@ class ReviewMetadata extends Component {
   handleInput = (evt) => {
     this.setState({ [evt.target.name]: evt.target.value });
   };
-
   handleChange = (evt) => {
-    if (evt.target.type === 'radio') {
-      this.setState({ [evt.target.name]: evt.target.value === 'yes' });
+    if (evt.target.type === "radio") {
+      this.setState({ [evt.target.name]: evt.target.value === "yes" });
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
     }
@@ -151,60 +145,57 @@ class ReviewMetadata extends Component {
 
   onRemoveItem = (item) => {
     this.setState({
-      creatorList: this.state.creatorList.filter(el => el !== item),
+      creatorList: this.state.creatorList.filter((el) => el !== item),
     });
   };
-
   onRemoveSubject = (item) => {
     this.setState({
       subjectHeaderList: this.state.subjectHeaderList.filter(
-        el => el !== item
+        (el) => el !== item
       ),
     });
   };
-
   onRemovePerson = (item) => {
     this.setState({
-      personHeaderList: this.state.personHeaderList.filter(el => el !== item),
+      personHeaderList: this.state.personHeaderList.filter((el) => el !== item),
     });
   };
-
   onAddItem = () => {
     this.setState({ listID: this.state.listID + 1 });
-    if (this.state.selectedGroupName === 'corporate/institutional name') {
+    if (this.state.selectedGroupName === "corporate/institutional name") {
       const temp = {
         htmlText:
-          `C/I name:${this.state.collTitle}, ${this.state.copTitle}`,
+          "C/I name:" + this.state.collTitle + ", " + this.state.copTitle,
         id: this.state.listID,
       };
       this.setState((state) => {
         const creatorList = [...state.creatorList, temp];
         return {
           creatorList,
-          collTitle: '',
-          copTitle: '',
+          collTitle: "",
+          copTitle: "",
         };
       });
     } else {
       const temp = {
         htmlText:
-          `personal name:${
-            this.state.persName
-          } ${
-            this.state.surName
-          }, ${
-            this.state.copOrig
-          }- ${
-            this.state.collYear}`,
+          "personal name:" +
+          this.state.persName +
+          " " +
+          this.state.surName +
+          ", " +
+          this.state.copOrig +
+          "- " +
+          this.state.collYear,
         id: this.state.listID,
       };
       this.setState((state) => {
         const creatorList = [...state.creatorList, temp];
         return {
           creatorList,
-          persName: '',
-          surName: '',
-          collYear: '',
+          persName: "",
+          surName: "",
+          collYear: "",
         };
       });
     }
@@ -221,11 +212,10 @@ class ReviewMetadata extends Component {
       const subjectHeaderList = [...state.subjectHeaderList, temp];
       return {
         subjectHeaderList,
-        subjectHeadingText: '',
+        subjectHeadingText: "",
       };
     });
   };
-
   onAddPerson = () => {
     this.setState({ listID: this.state.listID + 1 });
 
@@ -237,7 +227,7 @@ class ReviewMetadata extends Component {
       const personHeaderList = [...state.personHeaderList, temp];
       return {
         personHeaderList,
-        personHeadingText: '',
+        personHeadingText: "",
       };
     });
   };
@@ -245,7 +235,6 @@ class ReviewMetadata extends Component {
   onClearArray = () => {
     this.setState({ list: [] });
   };
-
   validateEmail = () => {
     const { checkEmail, email } = this.state;
     const myTest = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -263,7 +252,6 @@ class ReviewMetadata extends Component {
     const myTest = /[0-9]{4}([0-9]{2})?([0-9]{2})?/;
     return myTest.test(publishYear);
   };
-
   rebuildTooltip = () => {
     ReactTooltip.rebuild();
   };
@@ -294,7 +282,7 @@ class ReviewMetadata extends Component {
     } = this.state;
     const { coll } = this.props;
     this.props.editCollection(
-      coll.get('id'),
+      coll.get("id"),
       title,
       JSON.stringify(creatorList),
       JSON.stringify(subjectHeaderList),
@@ -319,9 +307,8 @@ class ReviewMetadata extends Component {
   };
 
   titleValidation = () => {
-    return this.props.error ? 'error' : null;
+    return this.props.error ? "error" : null;
   };
-
   togglePublic = (evt) => {
     this.setState({ isPublic: !this.state.isPublic });
   };
@@ -348,7 +335,7 @@ class ReviewMetadata extends Component {
       creatorLegend,
       url,
     } = this.state;
-    const text = `To edit Metadata, please use the information form below.${'\n'} Fields marked with asterisk (*) are required`;
+    const text = `To edit Metadata, please use the information form below.${"\n"} Fields marked with asterisk (*) are required`;
     if (visible) {
       this.rebuildTooltip();
     }
@@ -362,7 +349,7 @@ class ReviewMetadata extends Component {
           >
             {error && (
               <Alert bsStyle="danger">
-                {collection[error] || 'Error encountered'}
+                {collection[error] || "Error encountered"}
               </Alert>
             )}
             {!__DESKTOP__ && (
@@ -371,9 +358,9 @@ class ReviewMetadata extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef);
@@ -384,22 +371,22 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef = ref)}
+                        ref={(ref) => (this.fooRef = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Any further information regarding your OpenDACHS request will be sent to this e-mail address.'."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: usermail ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: usermail ? "black" : "red",
                       }}
                     >
                       *Your e-mail address:
@@ -411,7 +398,7 @@ class ReviewMetadata extends Component {
                       type="email"
                       validationState={this.validateEmail()}
                       name="usermail"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       placeholder="email@...uni-heidelberg.de*"
                       autoFocus
                       value={usermail}
@@ -425,9 +412,9 @@ class ReviewMetadata extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef1);
@@ -438,22 +425,22 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef1 = ref)}
+                        ref={(ref) => (this.fooRef1 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Name or title of the resource. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: title ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: title ? "black" : "red",
                       }}
                     >
                       *Title (Latin alphabet):
@@ -461,7 +448,7 @@ class ReviewMetadata extends Component {
 
                     <FormControl
                       type="text"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       placeholder="original script, e.g. Chinese, Japanese, Korean script."
                       inputRef={(obj) => {
                         this.input = obj;
@@ -474,9 +461,9 @@ class ReviewMetadata extends Component {
                     />
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef2);
@@ -487,21 +474,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef2 = ref)}
+                        ref={(ref) => (this.fooRef2 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Title (original script):
@@ -518,15 +505,15 @@ class ReviewMetadata extends Component {
                       onFocus={this.focusInput}
                       onChange={this.handleInput}
                       value={pubTitleOriginal}
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                     />
                   </FormGroup>
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef3);
@@ -537,45 +524,45 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef3 = ref)}
+                        ref={(ref) => (this.fooRef3 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Person or institution that authored the resource. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: collTitle || persName ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: collTitle || persName ? "black" : "red",
                       }}
                     >
                       *Authorship information (Latin alphabet):
                     </div>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'block',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "block",
+                        float: "left",
                       }}
                     >
                       [corporate/institutional name] or [personal name]:
                     </div>
                     <FormControl
                       componentClass="select"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       placeholder="corporate/institutional name"
                       inputRef={(ref) => {
                         this.state.groupSelect = ref;
                       }}
                       onChange={this.groupSelect}
                     >
-                      {this.state.creatorLegend.map(group => (
+                      {this.state.creatorLegend.map((group) => (
                         <option
                           key={group}
                           value={group}
@@ -586,164 +573,164 @@ class ReviewMetadata extends Component {
                       ))}
                     </FormControl>
                     {this.state.selectedGroupName ==
-                    'corporate/institutional name' ? (
+                    "corporate/institutional name" ? (
                       <React.Fragment>
-                          <FormControl
+                        <FormControl
                           type="text"
                           placeholder="corporate/institutional name"
                           inputRef={(obj) => {
-                              this.input = obj;
-                            }}
+                            this.input = obj;
+                          }}
                           id="collTitle"
                           name="collTitle"
-                          disabled={coll.get('ticketState') !== 'pending'}
+                          disabled={coll.get("ticketState") !== "pending"}
                           onFocus={this.focusInput}
                           onChange={this.handleInput}
                           value={collTitle}
-                          />
-                          <label
+                        />
+                        <label
                           style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
-                            }}
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
                           onMouseOver={() => {
-                              ReactTooltip.show(this.fooRef4);
-                            }}
+                            ReactTooltip.show(this.fooRef4);
+                          }}
                           onMouseOut={() => {
-                              ReactTooltip.hide(this.fooRef4);
-                            }}
-                          >
+                            ReactTooltip.hide(this.fooRef4);
+                          }}
+                        >
                           <span
-                              className="glyphicon glyphicon-info-sign"
-                              ref={ref => (this.fooRef4 = ref)}
-                              style={{
-                                marginRight: '4px',
-                                display: 'inline',
-                                width: '14px',
-                                float: 'left',
-                              }}
-                              data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
-                            />
-                        </label>
-                          <div
-                          style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
+                            className="glyphicon glyphicon-info-sign"
+                            ref={(ref) => (this.fooRef4 = ref)}
+                            style={{
+                              marginRight: "4px",
+                              display: "inline",
+                              width: "14px",
+                              float: "left",
                             }}
-                          >
+                            data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
+                          />
+                        </label>
+                        <div
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                        >
                           Authorship information (orig. script):
                         </div>
 
-                          <FormControl
+                        <FormControl
                           type="text"
                           placeholder=""
-                          disabled={coll.get('ticketState') !== 'pending'}
+                          disabled={coll.get("ticketState") !== "pending"}
                           inputRef={(obj) => {
-                              this.input = obj;
-                            }}
+                            this.input = obj;
+                          }}
                           id="copTitle"
                           name="copTitle"
                           onFocus={this.focusInput}
                           onChange={this.handleInput}
                           value={copTitle}
-                          />
-                        </React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <FormControl
-                            type="text"
-                            placeholder="Surname, given name"
-                            inputRef={(obj) => {
-                              this.input = obj;
-                            }}
-                            id="persName"
-                            name="persName"
-                            onFocus={this.focusInput}
-                            onChange={this.handleInput}
-                            disabled={coll.get('ticketState') !== 'pending'}
-                            value={persName}
-                          />
-                          <FormControl
-                            type="text"
-                            placeholder="YYYY"
-                            validationState={this.validateCollYear()}
-                            inputRef={(obj) => {
-                              this.input = obj;
-                            }}
-                            id="collYear"
-                            name="collYear"
-                            disabled={coll.get('ticketState') !== 'pending'}
-                            onFocus={this.focusInput}
-                            onChange={this.handleInput}
-                            value={collYear}
-                          />
-                          <label
+                        />
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <FormControl
+                          type="text"
+                          placeholder="Surname, given name"
+                          inputRef={(obj) => {
+                            this.input = obj;
+                          }}
+                          id="persName"
+                          name="persName"
+                          onFocus={this.focusInput}
+                          onChange={this.handleInput}
+                          disabled={coll.get("ticketState") !== "pending"}
+                          value={persName}
+                        />
+                        <FormControl
+                          type="text"
+                          placeholder="YYYY"
+                          validationState={this.validateCollYear()}
+                          inputRef={(obj) => {
+                            this.input = obj;
+                          }}
+                          id="collYear"
+                          name="collYear"
+                          disabled={coll.get("ticketState") !== "pending"}
+                          onFocus={this.focusInput}
+                          onChange={this.handleInput}
+                          value={collYear}
+                        />
+                        <label
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                          onMouseOver={() => {
+                            ReactTooltip.show(this.fooRef5);
+                          }}
+                          onMouseOut={() => {
+                            ReactTooltip.hide(this.fooRef5);
+                          }}
+                        >
+                          <span
+                            className="glyphicon glyphicon-info-sign"
+                            ref={(ref) => (this.fooRef5 = ref)}
                             style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
+                              marginRight: "4px",
+                              display: "inline",
+                              width: "14px",
+                              float: "left",
                             }}
-                            onMouseOver={() => {
-                              ReactTooltip.show(this.fooRef5);
-                            }}
-                            onMouseOut={() => {
-                              ReactTooltip.hide(this.fooRef5);
-                            }}
-                          >
-                            <span
-                              className="glyphicon glyphicon-info-sign"
-                              ref={ref => (this.fooRef5 = ref)}
-                              style={{
-                                marginRight: '4px',
-                                display: 'inline',
-                                width: '14px',
-                                float: 'left',
-                              }}
-                              data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
-                            />
-                          </label>
-                          <div
-                            style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
-                            }}
-                          >
+                            data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
+                          />
+                        </label>
+                        <div
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                        >
                           Authorship information (orig. script):
-                          </div>
+                        </div>
 
-                          <FormControl
-                            type="text"
-                            placeholder=""
-                            inputRef={(obj) => {
-                              this.input = obj;
-                            }}
-                            id="surName"
-                            name="surName"
-                            disabled={coll.get('ticketState') !== 'pending'}
-                            onFocus={this.focusInput}
-                            onChange={this.handleInput}
-                            value={surName}
-                          />
-                        </React.Fragment>
-                      )}
+                        <FormControl
+                          type="text"
+                          placeholder=""
+                          inputRef={(obj) => {
+                            this.input = obj;
+                          }}
+                          id="surName"
+                          name="surName"
+                          disabled={coll.get("ticketState") !== "pending"}
+                          onFocus={this.focusInput}
+                          onChange={this.handleInput}
+                          value={surName}
+                        />
+                      </React.Fragment>
+                    )}
                     {this.state.creatorList.length > 0 && (
                       <ul>
-                        {this.state.creatorList.map(item => (
+                        {this.state.creatorList.map((item) => (
                           <li key={item.id}>
                             <React.Fragment>
                               <span
                                 className="glyphicon glyphicon-remove glyphicon-button"
                                 value={item}
-                                disabled={coll.get('ticketState') !== 'pending'}
+                                disabled={coll.get("ticketState") !== "pending"}
                                 onClick={() => this.onRemoveItem(item)}
                                 style={{
-                                  marginRight: '4px',
-                                  display: 'inline',
-                                  width: '14px',
-                                  float: 'left',
+                                  marginRight: "4px",
+                                  display: "inline",
+                                  width: "14px",
+                                  float: "left",
                                 }}
                               />
                               <div>{item.htmlText}</div>
@@ -754,13 +741,13 @@ class ReviewMetadata extends Component {
                     )}
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddItem}
                       disabled={
                         !persName &&
                         !collTitle &&
-                        coll.get('ticketState') !== 'pending'
+                        coll.get("ticketState") !== "pending"
                       }
                     >
                       Add Additional Creator
@@ -774,9 +761,9 @@ class ReviewMetadata extends Component {
                   >
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef6);
@@ -787,22 +774,22 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef6 = ref)}
+                        ref={(ref) => (this.fooRef6 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="The name of the entity that holds, archives, publishes, prints, distributes, releases, issues or produces the resource. This property will be used to formulate the citation. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc.)"
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: publisher ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: publisher ? "black" : "red",
                       }}
                     >
                       *Publisher (Latin alphabet):
@@ -817,16 +804,16 @@ class ReviewMetadata extends Component {
                       }}
                       id="publisher"
                       name="publisher"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       onFocus={this.focusInput}
                       onChange={this.handleInput}
                       value={publisher}
                     />
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef7);
@@ -837,21 +824,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef7 = ref)}
+                        ref={(ref) => (this.fooRef7 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Publisher (orig. script):
@@ -865,16 +852,16 @@ class ReviewMetadata extends Component {
                       }}
                       id="publisherOriginal"
                       name="publisherOriginal"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       onFocus={this.focusInput}
                       onChange={this.handleInput}
                       value={publisherOriginal}
                     />
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef8);
@@ -885,21 +872,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef8 = ref)}
+                        ref={(ref) => (this.fooRef8 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Date when the data is made publicly available."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Publication date [YYYY-MM-DD]:
@@ -914,7 +901,7 @@ class ReviewMetadata extends Component {
                       }}
                       id="publishYear"
                       name="publishYear"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       onFocus={this.focusInput}
                       onChange={this.handleInput}
                       value={publishYear}
@@ -926,9 +913,9 @@ class ReviewMetadata extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef9);
@@ -939,21 +926,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef9 = ref)}
+                        ref={(ref) => (this.fooRef9 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Subject headings help to describe and categorize the web resource. The headings should conform to a list drawn from the Library of Congress, see http://id.loc.gov/authorities/subjects.html."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Subject headings (in English):
@@ -967,7 +954,7 @@ class ReviewMetadata extends Component {
                           this.input = obj;
                         }}
                         id="subjectHeadingText"
-                        disabled={coll.get('ticketState') !== 'pending'}
+                        disabled={coll.get("ticketState") !== "pending"}
                         name="subjectHeadingText"
                         onFocus={this.focusInput}
                         onChange={this.handleInput}
@@ -976,19 +963,19 @@ class ReviewMetadata extends Component {
                     </React.Fragment>
                     {this.state.subjectHeaderList.length > 0 && (
                       <ul>
-                        {this.state.subjectHeaderList.map(item => (
+                        {this.state.subjectHeaderList.map((item) => (
                           <li key={item.id}>
                             <React.Fragment>
                               <span
                                 className="glyphicon glyphicon-remove glyphicon-button"
                                 value={item}
-                                disabled={coll.get('ticketState') !== 'pending'}
+                                disabled={coll.get("ticketState") !== "pending"}
                                 onClick={() => this.onRemoveSubject(item)}
                                 style={{
-                                  marginRight: '4px',
-                                  display: 'inline',
-                                  width: '14px',
-                                  float: 'left',
+                                  marginRight: "4px",
+                                  display: "inline",
+                                  width: "14px",
+                                  float: "left",
                                 }}
                               />
                               <div>{item.htmlText}</div>
@@ -999,12 +986,12 @@ class ReviewMetadata extends Component {
                     )}
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddSubject}
                       disabled={
                         !subjectHeadingText &&
-                        coll.get('ticketState') !== 'pending'
+                        coll.get("ticketState") !== "pending"
                       }
                     >
                       Add Additional header
@@ -1013,9 +1000,9 @@ class ReviewMetadata extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef10);
@@ -1026,21 +1013,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef10 = ref)}
+                        ref={(ref) => (this.fooRef10 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Adding person headings allows for expanding the catalogue entry by the persons the web resource focuses on."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Person headings:
@@ -1051,7 +1038,7 @@ class ReviewMetadata extends Component {
                         as="textarea"
                         rows="3"
                         placeholder="person"
-                        disabled={coll.get('ticketState') !== 'pending'}
+                        disabled={coll.get("ticketState") !== "pending"}
                         inputRef={(obj) => {
                           this.input = obj;
                         }}
@@ -1064,19 +1051,19 @@ class ReviewMetadata extends Component {
                     </React.Fragment>
                     {this.state.personHeaderList.length > 0 && (
                       <ul>
-                        {this.state.personHeaderList.map(item => (
+                        {this.state.personHeaderList.map((item) => (
                           <li key={item.id}>
                             <React.Fragment>
                               <span
                                 className="glyphicon glyphicon-remove glyphicon-button"
                                 value={item}
-                                disabled={coll.get('ticketState') !== 'pending'}
+                                disabled={coll.get("ticketState") !== "pending"}
                                 onClick={() => this.onRemovePerson(item)}
                                 style={{
-                                  marginRight: '4px',
-                                  display: 'inline',
-                                  width: '14px',
-                                  float: 'left',
+                                  marginRight: "4px",
+                                  display: "inline",
+                                  width: "14px",
+                                  float: "left",
                                 }}
                               />
                               <div>{item.htmlText}</div>
@@ -1087,12 +1074,12 @@ class ReviewMetadata extends Component {
                     )}
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddPerson}
                       disabled={
                         !personHeadingText &&
-                        coll.get('ticketState') !== 'pending'
+                        coll.get("ticketState") !== "pending"
                       }
                     >
                       Add Additional header
@@ -1103,9 +1090,9 @@ class ReviewMetadata extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef11);
@@ -1116,21 +1103,21 @@ class ReviewMetadata extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef11 = ref)}
+                        ref={(ref) => (this.fooRef11 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="If you have comments for the DACHS team you can post them here."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Note to DACHS team:
@@ -1140,7 +1127,7 @@ class ReviewMetadata extends Component {
                     <textarea
                       className="form-control"
                       rows="3"
-                      disabled={coll.get('ticketState') !== 'pending'}
+                      disabled={coll.get("ticketState") !== "pending"}
                       placeholder="note to dachs"
                       inputRef={(obj) => {
                         this.input = obj;

@@ -26,55 +26,6 @@ const itemOrder = {
   denied: 5,
 };
 
-const sortFn = (a, b, by = null) => {
-  if (by) {
-    if (a.get(by.get("sort")) > b.get(by.get("sort")))
-      return by.get("dir") === "DESC" ? -1 : 1;
-    if (a.get(by.get("sort")) < b.get(by.get("sort")))
-      return by.get("dir") === "DESC" ? 1 : -1;
-  } else {
-    if (a > b) return -1;
-    if (a < b) return 1;
-  }
-  return 0;
-};
-const sortByStatus = (statusA, statusB) => {
-  var a = itemOrder[statusA.get("ticketState")];
-  var b = itemOrder[statusB.get("ticketState")];
-  if (a > b) return 1;
-  if (a < b) return -1;
-  return 0;
-};
-
-const sortByCreatedWithinStatus = (a,b) => {
-  var t = itemOrder[a.get("ticketState")] - itemOrder[b.get("ticketState")];
-   if (t == 0)
-       return a.get("created_at") < b.get("created_at");
-   else
-       return t;
-}
-export function setSort(sortBy) {
-  return {
-    type: COLL_SET_SORT,
-    sortBy,
-  };
-}
-
-export function sortCollections(collections) {
-  return {
-    type: COLLECTIONS_REORDER,
-    collections,
-  };
-}
-export function sortCollectionsReview(collections) {
-  return {
-    type: COLLECTIONS_REORDER_RĘVIEW,
-    collections,
-  };
-}
-
-
-
 const initialState = fromJS({
   collections: null,
   loading: false,
@@ -288,5 +239,51 @@ export function loadReviewList() {
       client.get(`${config.apiPath}/review`, {
         params: {},
       }),
+  };
+}
+const sortFn = (a, b, by = null) => {
+  if (by) {
+    if (a.get(by.get("sort")) > b.get(by.get("sort")))
+      return by.get("dir") === "DESC" ? -1 : 1;
+    if (a.get(by.get("sort")) < b.get(by.get("sort")))
+      return by.get("dir") === "DESC" ? 1 : -1;
+  } else {
+    if (a > b) return -1;
+    if (a < b) return 1;
+  }
+  return 0;
+};
+const sortByStatus = (statusA, statusB) => {
+  var a = itemOrder[statusA.get("ticketState")];
+  var b = itemOrder[statusB.get("ticketState")];
+  if (a > b) return 1;
+  if (a < b) return -1;
+  return 0;
+};
+
+const sortByCreatedWithinStatus = (a,b) => {
+  var t = itemOrder[a.get("ticketState")] - itemOrder[b.get("ticketState")];
+   if (t == 0)
+       return a.get("created_at") < b.get("created_at");
+   else
+       return t;
+}
+export function setSort(sortBy) {
+  return {
+    type: COLL_SET_SORT,
+    sortBy,
+  };
+}
+
+export function sortCollections(collections) {
+  return {
+    type: COLLECTIONS_REORDER,
+    collections,
+  };
+}
+export function sortCollectionsReview(collections) {
+  return {
+    type: COLLECTIONS_REORDER_RĘVIEW,
+    collections,
   };
 }

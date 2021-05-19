@@ -74,7 +74,7 @@ export default function (parameters) {
         console.error(err);
       }
       console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.internalApiPort);
-      console.info('==> 💻  Open %s in a yolo browser to view the app.', config.appHost);
+      console.info('==> 💻  Open %s in a browser to view the app.', config.appHost);
     });
   } else {
     console.error('==>     ERROR: No PORT environment variable has been specified');

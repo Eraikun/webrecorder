@@ -4,7 +4,7 @@ services:
     app:
         container_name: app
         build: ./webrecorder
-        command: uwsgi --need-app /code/apps/apiapp.ini
+        command: ulimit -n 65536; uwsgi --need-app /code/apps/apiapp.ini
 
         env_file:
             - ./wr.env
@@ -64,7 +64,7 @@ services:
     recorder:
         container_name: recorder
         build: ./webrecorder
-        command: uwsgi --need-app /code/apps/rec.ini
+        command: ulimit -n 65536; uwsgi --need-app /code/apps/rec.ini
 
         env_file:
             - ./wr.env
@@ -82,7 +82,7 @@ services:
     warcserver:
         container_name: warcserver
         build: ./webrecorder
-        command: uwsgi --need-app /code/apps/load.ini
+        command: ulimit -n 65536; uwsgi --need-app /code/apps/load.ini
 
         env_file:
             - ./wr.env
@@ -115,12 +115,25 @@ services:
             - 8092:81
 
     behaviors:
-      container_name: behaviors
-      image: "webrecorder/behaviors:latest"
+        container_name: behaviors
+        image: "webrecorder/behaviors:latest"
+
+    coturn:
+        container_name: coturn
+        image: oldwebtoday/coturn:1.0
+        ports:
+            - "33478:33478/tcp"
+            - "33478:33478/udp"
+
+        networks:
+            - browsers
+
+        env_file:
+            - ./wr.env
 
     shepherd:
         container_name: shepherd
-        image: oldwebtoday/shepherd:1.1.0
+        image: oldwebtoday/shepherd:1.2.0
 
         env_file:
             - ./wr.env
@@ -134,10 +147,10 @@ services:
             - PROXY_GET_CA=http://wsgiprox/download/pem
 
             - CONTAINER_EXPIRE_SECS=3600
-            - IDLE_TIMEOUT=120
+            - IDLE_TIMEOUT=5
 
-            - BROWSER_NET=webrecorder_browsers
-            - MAIN_NET=webrecorder_default
+            - BROWSER_NET=conifer_browsers
+            - MAIN_NET=conifer_default
 
         ports:
             - 9020:9020
@@ -146,8 +159,45 @@ services:
             - redis
 
         volumes:
+            - ./webrecorder/webrecorder/config/auto-headless.yaml:/app/flocks/auto-headless.yaml
+            - ./webrecorder/webrecorder/config/pool_config.yaml:/app/pool_config.yaml
             - /var/run/docker.sock:/var/run/docker.sock
 
+    browsertrix:
+        container_name: browsertrix
+        image: webrecorder/browsertrix:0.2.0
+        #build:
+        #    context: .
+        environment:
+            - REDIS_URL=redis://redis/0
+            - DEFAULT_POOL=auto-pool
+            - DEFAULT_FLOCK=auto-headless
+            - SCREENSHOT_API_URL=http://app:8088/api/v1/remote/put-record
+            - EXTRACTED_RAW_DOM_API_URL=http://app:8088/api/v1/remote/put-record
+            - PROXY_HOST=app
+            - PROXY_PORT=8088
+
+        depends_on:
+            - redis
+            - app
+
+        ports:
+            - 8000:8000
+
+    solr:
+        container_name: solr
+        image: solr
+
+        volumes:
+          - ./data/solr:/var/solr
+
+        entrypoint:
+          - docker-entrypoint.sh
+          - solr-precreate
+          - webrecorder
+
+        ports:
+          - 8983:8983
 
     redis:
         container_name: redis
@@ -159,11 +209,20 @@ services:
         volumes:
             - ./data:/data
 
+    # Postfix (if sending mail locally)
+    mailserver:
+        container_name: mailserver
+        restart: always
+        image: catatnight/postfix
+
+        environment:
+            - "maildomain=localhost"
+            - "smtp_user=test:archive"
+
 
 networks:
     default:
         driver: bridge
-
-
     browsers:
         driver: bridge
+

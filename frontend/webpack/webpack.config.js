@@ -10,7 +10,6 @@ const smp = new SpeedMeasurePlugin({ disable: process.env.STATS });
 
 module.exports = smp.wrap({
   devtool: 'eval-source-map',
-  devServer: { overlay:false },
   context: path.resolve(__dirname, '..'),
 
   output: {

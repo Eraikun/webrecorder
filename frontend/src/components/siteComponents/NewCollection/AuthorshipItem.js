@@ -8,9 +8,9 @@ class AuthorshipItem extends Component {
     item: PropTypes.object,
     onRemoveItem: PropTypes.func,
   };
-  /*constructor(props) {
+  constructor(props) {
     super(props);
-  }*/
+  }
   onRemoveItem = () => {
     const { onRemoveItem, item } = this.props;
     onRemoveItem(item);

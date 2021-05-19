@@ -1,28 +1,23 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-return-assign */
-/* eslint-disable react/button-has-type */
-/* eslint-disable indent */
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Toggle from "react-toggle";
+import { Alert, ControlLabel, FormGroup, FormControl } from "react-bootstrap";
+import { incrementCollCount } from "store/modules/auth";
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Toggle from 'react-toggle';
-import { Alert, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
-import { incrementCollCount } from 'store/modules/auth';
+import { defaultCollectionTitle, apiPath } from "config";
+import { apiFormatUrl } from "helpers/utils";
+import { WarcIcon } from "components/icons";
 
-import { defaultCollectionTitle, apiPath } from 'config';
-import { apiFormatUrl } from 'helpers/utils';
-import { WarcIcon } from 'components/icons';
+import { collection, upload as uploadErrors } from "helpers/userMessaging";
+import PersonHeading from "./PersonHeading";
+import AuthorshipItem from "./AuthorshipItem";
+import Modal from "components/Modal";
 
-import { collection, upload as uploadErrors } from 'helpers/userMessaging';
-import Modal from 'components/Modal';
-import ReactTooltip from 'react-tooltip';
-import PersonHeading from './PersonHeading';
-import AuthorshipItem from './AuthorshipItem';
+import ReactTooltip from "react-tooltip";
 
+import "./style.scss";
 
-import './style.scss';
-
-const creatorLegend = ['corporate/institutional name', 'personal name'];
+const creatorLegend = ["corporate/institutional name", "personal name"];
 const creatorList = [];
 const subjectHeaderList = [];
 const personHeaderList = [];
@@ -46,43 +41,43 @@ class NewCollection extends Component {
     this.interval = null;
     this.fileObj = null;
     this.state = {
-      file: '',
+      file: "",
       isUploading: false,
       listID: 0,
       urlValid: false,
       emailValid: false,
       isHidden: true,
-      publisher: '',
-      publisherOriginal: '',
+      publisher: "",
+      publisherOriginal: "",
       subjectHeaderList,
-      subjectHeadingText: '',
+      subjectHeadingText: "",
       personHeaderList,
-      personHeadingText: '',
-      collTitle: '',
-      title: '',
-      pubTitleOriginal: '',
-      collYear: '',
-      copTitle: '',
-      surName: '',
+      personHeadingText: "",
+      collTitle: "",
+      title: "",
+      pubTitleOriginal: "",
+      collYear: "",
+      copTitle: "",
+      surName: "",
       status: null,
-      persName: '',
+      persName: "",
       progress: 0,
-      usermail: '',
+      usermail: "",
       creatorList,
       isPublic: false,
       creatorLegend,
-      noteToDachs: '',
-      publishYear: '',
-      projektcode: '',
+      noteToDachs: "",
+      publishYear: "",
+      projektcode: "",
       projektcodeValid: false,
-      selectedGroupName: 'corporate/institutional name',
-      url: '',
-      ticketState: 'open',
+      selectedGroupName: "corporate/institutional name",
+      url: "",
+      ticketState: "open",
       isCollLoaded: true,
-      recordingUrl: '',
-      recordingTimestamp: '',
-      targetColl: props.fromCollection ? 'chosen' : 'auto',
-      doi: '',
+      recordingUrl: "",
+      recordingTimestamp: "",
+      targetColl: props.fromCollection ? "chosen" : "auto",
+      doi: "",
     };
   }
 
@@ -90,13 +85,13 @@ class NewCollection extends Component {
     this.setState((state) => {
       return {
         open: false,
-        file: '',
+        file: "",
         canCancel: true,
         isUploading: false,
         status: null,
         isIndexing: false,
         progress: 0,
-        targetColl: this.props.fromCollection ? 'chosen' : 'auto',
+        targetColl: this.props.fromCollection ? "chosen" : "auto",
       };
     });
   };
@@ -108,9 +103,9 @@ class NewCollection extends Component {
   close = () => {
     const { close } = this.props;
     if (this.state.isUploading && this.xhr && this.state.canCancel) {
-      this.xhr.upload.removeEventListener('progress', this.uploadProgress);
-      this.xhr.removeEventListener('load', this.uploadSuccess);
-      this.xhr.removeEventListener('loadend', this.uploadComplete);
+      this.xhr.upload.removeEventListener("progress", this.uploadProgress);
+      this.xhr.removeEventListener("load", this.uploadSuccess);
+      this.xhr.removeEventListener("loadend", this.uploadComplete);
       this.xhr.abort();
     }
     close();
@@ -122,7 +117,7 @@ class NewCollection extends Component {
       this.setState((state) => {
         return {
           file: this.fileObj.name,
-          urlValid: '',
+          urlValid: "",
         };
       });
     }
@@ -135,10 +130,9 @@ class NewCollection extends Component {
   handleInput = (evt) => {
     this.setState({ [evt.target.name]: evt.target.value });
   };
-
   handleChange = (evt) => {
-    if (evt.target.type === 'radio') {
-      this.setState({ [evt.target.name]: evt.target.value === 'yes' });
+    if (evt.target.type === "radio") {
+      this.setState({ [evt.target.name]: evt.target.value === "yes" });
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
     }
@@ -146,16 +140,15 @@ class NewCollection extends Component {
 
   goToCollections = () => {
     const { auth, history } = this.props;
-    history.push(`/${auth.getIn(['user', 'username'])}`);
+    history.push(`/${auth.getIn(["user", "username"])}`);
   };
 
   groupSelect = (evt) => {
     this.setState({ [evt.target.name]: evt.target.value });
     this.setState({ selectedGroupName: evt.target.value });
   };
-
   indexing = (data) => {
-    this.setState({ canCancel: false, status: 'Indexing...' });
+    this.setState({ canCancel: false, status: "Indexing..." });
 
     const url = apiFormatUrl(
       `${apiPath}/upload/${data.upload_id}?user=${data.user}`
@@ -163,13 +156,12 @@ class NewCollection extends Component {
 
     this.interval = setInterval(() => {
       fetch(url, {
-        headers: new Headers({ 'x-requested-with': 'XMLHttpRequest' }),
+        headers: new Headers({ "x-requested-with": "XMLHttpRequest" }),
       })
-        .then(res => res.json())
+        .then((res) => res.json())
         .then(this.indexResponse);
     }, 75);
   };
-
   indexingComplete = (user, coll) => {
     const {
       title,
@@ -223,7 +215,6 @@ class NewCollection extends Component {
     );
     this.props.close();
   };
-
   indexResponse = (data) => {
     const stateUpdate = {};
 
@@ -252,33 +243,29 @@ class NewCollection extends Component {
       this.indexingComplete(data.user, data.coll);
     }
   };
-
   onRemoveItem = (item) => {
     this.setState({
-      creatorList: this.state.creatorList.filter(el => el !== item),
+      creatorList: this.state.creatorList.filter((el) => el !== item),
     });
   };
-
   onRemoveSubject = (item) => {
     this.setState({
       subjectHeaderList: this.state.subjectHeaderList.filter(
-        el => el !== item
+        (el) => el !== item
       ),
     });
   };
-
   onRemovePerson = (item) => {
     this.setState({
-      personHeaderList: this.state.personHeaderList.filter(el => el !== item),
+      personHeaderList: this.state.personHeaderList.filter((el) => el !== item),
     });
   };
-
   onAddItem = () => {
     this.setState({ listID: this.state.listID + 1 });
-    if (this.state.selectedGroupName === 'corporate/institutional name') {
-      let tempText = `C/I name:${this.state.collTitle}`;
-      this.state.copTitle !== ''
-        ? (tempText += `, ${this.state.copTitle}`)
+    if (this.state.selectedGroupName === "corporate/institutional name") {
+      let tempText = "C/I name:" + this.state.collTitle;
+      this.state.copTitle !== ""
+        ? (tempText += ", " + this.state.copTitle)
         : null;
 
       const temp = {
@@ -289,17 +276,17 @@ class NewCollection extends Component {
         const creatorList = [...state.creatorList, temp];
         return {
           creatorList,
-          collTitle: '',
-          copTitle: '',
+          collTitle: "",
+          copTitle: "",
         };
       });
     } else {
-      let tempText = `personal name:${this.state.persName}`;
-      this.state.surName !== ''
-        ? (tempText += `, ${this.state.surName}`)
+      let tempText = "personal name:" + this.state.persName;
+      this.state.surName !== ""
+        ? (tempText += ", " + this.state.surName)
         : null;
-      this.state.collYear !== ''
-        ? (tempText += ` - ${this.state.collYear}`)
+      this.state.collYear !== ""
+        ? (tempText += " - " + this.state.collYear)
         : null;
       const temp = {
         htmlText: tempText,
@@ -312,9 +299,9 @@ class NewCollection extends Component {
         const creatorList = [...state.creatorList, temp];
         return {
           creatorList,
-          persName: '',
-          surName: '',
-          collYear: '',
+          persName: "",
+          surName: "",
+          collYear: "",
         };
       });
     }
@@ -331,11 +318,10 @@ class NewCollection extends Component {
       const subjectHeaderList = [...state.subjectHeaderList, temp];
       return {
         subjectHeaderList,
-        subjectHeadingText: '',
+        subjectHeadingText: "",
       };
     });
   };
-
   onAddPerson = () => {
     this.setState({ listID: this.state.listID + 1 });
 
@@ -347,7 +333,7 @@ class NewCollection extends Component {
       const personHeaderList = [...state.personHeaderList, temp];
       return {
         personHeaderList,
-        personHeadingText: '',
+        personHeadingText: "",
       };
     });
   };
@@ -355,7 +341,6 @@ class NewCollection extends Component {
   onClearArray = () => {
     this.setState({ list: [] });
   };
-
   validateCollYear = () => {
     const { collYear } = this.state;
     const myTest = /[0-9]{4}( - [0-9]{4})?/;
@@ -367,7 +352,6 @@ class NewCollection extends Component {
     const myTest = /[0-9]{4}([0-9]{2})?([0-9]{2})?/;
     return myTest.test(publishYear);
   };
-
   rebuildTooltip = () => {
     ReactTooltip.rebuild();
   };
@@ -437,21 +421,21 @@ class NewCollection extends Component {
       );
     } else {
       this.xhr = new XMLHttpRequest();
-      const target = targetColl === 'chosen' ? activeCollection : '';
+      const target = targetColl === "chosen" ? activeCollection : "";
       const url = apiFormatUrl(
         `${apiPath}/upload?force-coll=${target}&filename=${file}`
       );
 
-      this.xhr.upload.addEventListener('progress', this.uploadProgress);
-      this.xhr.addEventListener('load', this.uploadSuccess);
-      this.xhr.addEventListener('loadend', this.uploadComplete);
+      this.xhr.upload.addEventListener("progress", this.uploadProgress);
+      this.xhr.addEventListener("load", this.uploadSuccess);
+      this.xhr.addEventListener("loadend", this.uploadComplete);
 
-      this.xhr.open('PUT', url, true);
-      this.xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+      this.xhr.open("PUT", url, true);
+      this.xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       this.setState({
         isUploading: true,
-        status: 'Uploading...',
+        status: "Uploading...",
       });
 
       this.xhr.send(this.fileObj);
@@ -459,7 +443,6 @@ class NewCollection extends Component {
       return this.xhr;
     }
   };
-
   toggleHidden = (evt) => {
     evt.stopPropagation();
     evt.preventDefault();
@@ -467,7 +450,6 @@ class NewCollection extends Component {
       isHidden: !this.state.isHidden,
     });
   };
-
   triggerFile = () => {
     this.fileField.click();
   };
@@ -481,17 +463,16 @@ class NewCollection extends Component {
 
     this.setState({
       canCancel: true,
-      status: uploadErrors[data.error] || 'Error Encountered',
+      status: uploadErrors[data.error] || "Error Encountered",
     });
-    this.xhr.upload.removeEventListener('progress', this.uploadProgress);
-    this.xhr.removeEventListener('load', this.uploadSuccess);
-    this.xhr.removeEventListener('loadend', this.uploadComplete);
+    this.xhr.upload.removeEventListener("progress", this.uploadProgress);
+    this.xhr.removeEventListener("load", this.uploadSuccess);
+    this.xhr.removeEventListener("loadend", this.uploadComplete);
     this.xhr.abort();
     if (data && data.upload_id) {
       return this.indexing(data);
     }
   };
-
   uploadProgress = (evt) => {
     const progress = Math.round((50.0 * evt.loaded) / evt.total);
 
@@ -502,7 +483,7 @@ class NewCollection extends Component {
     }
   };
 
-  uploadSuccess = evt => this.setState({ progress: 50 });
+  uploadSuccess = (evt) => this.setState({ progress: 50 });
 
   validateEmail = () => {
     const { emailValid, usermail } = this.state;
@@ -510,7 +491,7 @@ class NewCollection extends Component {
       return 'error';
     }
     return null;*/
-    const myTest = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:)\])/;
+    const myTest = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     if (myTest.test(usermail) === true && !emailValid) {
       this.setState({ emailValid: true });
     } else if (myTest.test(usermail) === false && emailValid) {
@@ -553,7 +534,6 @@ class NewCollection extends Component {
       return true;
     }*/
   };
-
   validateAuthorship = () => {
     const {
       collTitle,
@@ -564,12 +544,14 @@ class NewCollection extends Component {
       creatorList,
     } = this.state;
 
-    if (this.state.selectedGroupName == 'corporate/institutional name') {
+    if (this.state.selectedGroupName == "corporate/institutional name") {
       if (!collTitle || creatorList.length == 0) {
-        return 'error';
+        return "error";
       }
-    } else if (!surName || creatorList.length == 0) {
-      return 'error';
+    } else {
+      if (!surName || creatorList.length == 0) {
+        return "error";
+      }
     }
 
     return null;
@@ -578,21 +560,20 @@ class NewCollection extends Component {
   validateTitle = () => {
     const { title } = this.state;
     if (!title) {
-      return 'error';
+      return "error";
     }
     return null;
   };
-
   validatePublisher = () => {
     const { publisher } = this.state;
     if (!publisher) {
-      return 'error';
+      return "error";
     }
     return null;
   };
 
   titleValidation = () => {
-    return this.props.error ? 'error' : null;
+    return this.props.error ? "error" : null;
   };
 
   togglePublic = (evt) => {
@@ -632,7 +613,7 @@ class NewCollection extends Component {
       creatorList,
     } = this.state;
 
-    const text = `To edit Metadata, please use the information form below.${'\n'} Fields marked with asterisk (*) are required`;
+    const text = `To edit Metadata, please use the information form below.${"\n"} Fields marked with asterisk (*) are required`;
     if (visible) {
       this.rebuildTooltip();
     }
@@ -646,7 +627,7 @@ class NewCollection extends Component {
           >
             {error && (
               <Alert bsStyle="danger">
-                {collection[error] || 'Error encountered'}
+                {collection[error] || "Error encountered"}
               </Alert>
             )}
             {!__DESKTOP__ && (
@@ -654,7 +635,7 @@ class NewCollection extends Component {
                 <div>
                   <FormGroup id="fieldset">
                     <label
-                      style={{ display: 'inline', float: 'left' }}
+                      style={{ display: "inline", float: "left" }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef);
                       }}
@@ -664,22 +645,22 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef = ref)}
+                        ref={(ref) => (this.fooRef = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Any further information regarding your OpenDACHS request will be sent to this e-mail address."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: emailValid ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: emailValid ? "black" : "red",
                       }}
                     >
                       *Your e-mail address:
@@ -689,8 +670,8 @@ class NewCollection extends Component {
                     <FormControl
                       style={{
                         border: emailValid
-                          ? '1px solid black'
-                          : '1px solid #ff1a1a',
+                          ? "1px solid black"
+                          : "1px solid #ff1a1a",
                       }}
                       aria-label="email"
                       validationState={this.validateEmail()}
@@ -709,9 +690,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef21);
@@ -722,22 +703,22 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef21 = ref)}
+                        ref={(ref) => (this.fooRef21 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="URL of the web resource."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: urlValid ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: urlValid ? "black" : "red",
                       }}
                     >
                       *URL(URL of recorded page if WARC provided):
@@ -746,8 +727,8 @@ class NewCollection extends Component {
                       aria-label="url"
                       style={{
                         border: urlValid
-                          ? '1px solid black'
-                          : '1px solid #ff1a1a',
+                          ? "1px solid black"
+                          : "1px solid #ff1a1a",
                       }}
                       validationState={this.validateURL()}
                       name="url"
@@ -763,7 +744,7 @@ class NewCollection extends Component {
                         <div>
                           <label htmlFor="upload-file">
                             <WarcIcon />
-                            WARC/ARC file to upload:{' '}
+                            WARC/ARC file to upload:{" "}
                           </label>
 
                           <div className="input-group">
@@ -776,13 +757,13 @@ class NewCollection extends Component {
                               placeholder="Click Pick File to select a web archive file"
                               readOnly
                               onClick={this.triggerFile}
-                              style={{ backgroundColor: 'white' }}
+                              style={{ backgroundColor: "white" }}
                             />
 
                             <button
                               aria-label="pick file..."
                               type="button"
-                              className="btn btn-success"
+                              class="btn btn-success"
                               onClick={this.triggerFile}
                             >
                               Pick File...
@@ -795,7 +776,7 @@ class NewCollection extends Component {
                                 this.fileField = obj99;
                               }}
                               name="uploadFile"
-                              style={{ display: 'none' }}
+                              style={{ display: "none" }}
                               accept=".gz,.warc,.arc,.har"
                             />
                             <button
@@ -815,9 +796,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef1);
@@ -828,22 +809,22 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef1 = ref)}
+                        ref={(ref) => (this.fooRef1 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Name or title of the resource. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: title ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: title ? "black" : "red",
                       }}
                     >
                       *Title (Latin alphabet):
@@ -857,7 +838,7 @@ class NewCollection extends Component {
                         this.input = obj;
                       }}
                       style={{
-                        border: title ? '1px solid black' : '1px solid #ff1a1a',
+                        border: title ? "1px solid black" : "1px solid #ff1a1a",
                       }}
                       id="title"
                       name="title"
@@ -867,9 +848,9 @@ class NewCollection extends Component {
                     />
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef2);
@@ -880,21 +861,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef2 = ref)}
+                        ref={(ref) => (this.fooRef2 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Title (original script):
@@ -914,7 +895,7 @@ class NewCollection extends Component {
                     />
 
                     <label
-                      style={{ display: 'inline', float: 'left' }}
+                      style={{ display: "inline", float: "left" }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef24);
                       }}
@@ -924,22 +905,22 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef24 = ref)}
+                        ref={(ref) => (this.fooRef24 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="obligatory and choose wisely since projektcode is used to sort archives under a topic."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: projektcodeValid ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: projektcodeValid ? "black" : "red",
                       }}
                     >
                       *Projektcode (to join arcives under a topic ):
@@ -949,8 +930,8 @@ class NewCollection extends Component {
                     <FormControl
                       style={{
                         border: projektcodeValid
-                          ? '1px solid black'
-                          : '1px solid #ff1a1a',
+                          ? "1px solid black"
+                          : "1px solid #ff1a1a",
                       }}
                       aria-label="text"
                       validationState={this.ValidateProjektcode()}
@@ -965,9 +946,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef3);
@@ -978,38 +959,38 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef3 = ref)}
+                        ref={(ref) => (this.fooRef3 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Person or institution that authored the resource. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                         color:
-                          selectedGroupName === 'corporate/institutional name'
+                          selectedGroupName === "corporate/institutional name"
                             ? collTitle || creatorList.length > 0
-                              ? 'black'
-                              : 'red'
+                              ? "black"
+                              : "red"
                             : persName || creatorList.length > 0
-                              ? 'black'
-                              : 'red',
+                            ? "black"
+                            : "red",
                       }}
                     >
                       *Authorship information (Latin alphabet):
                     </div>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'block',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "block",
+                        float: "left",
                       }}
                     >
                       [corporate/institutional name] or [personal name]:
@@ -1022,7 +1003,7 @@ class NewCollection extends Component {
                       }}
                       onChange={this.groupSelect}
                     >
-                      {this.state.creatorLegend.map(group => (
+                      {this.state.creatorLegend.map((group) => (
                         <option
                           key={group}
                           value={group}
@@ -1033,150 +1014,150 @@ class NewCollection extends Component {
                       ))}
                     </FormControl>
                     {this.state.selectedGroupName ==
-                    'corporate/institutional name' ? (
+                    "corporate/institutional name" ? (
                       <React.Fragment>
-                          <FormControl
+                        <FormControl
                           type="text"
                           validationState={this.validateAuthorship()}
                           placeholder="corporate/institutional name"
                           inputRef={(obj) => {
-                              this.input = obj;
-                            }}
+                            this.input = obj;
+                          }}
                           style={{
-                              border:
+                            border:
                               collTitle || creatorList.length > 0
-                                ? '1px solid black'
-                                : '1px solid #ff1a1a',
-                            }}
+                                ? "1px solid black"
+                                : "1px solid #ff1a1a",
+                          }}
                           id="collTitle"
                           name="collTitle"
                           onFocus={this.focusInput}
                           onChange={this.handleInput}
                           value={collTitle}
-                          />
-                          <label
+                        />
+                        <label
                           style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
-                            }}
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
                           onMouseOver={() => {
-                              ReactTooltip.show(this.fooRef4);
-                            }}
+                            ReactTooltip.show(this.fooRef4);
+                          }}
                           onMouseOut={() => {
-                              ReactTooltip.hide(this.fooRef4);
-                            }}
-                          >
+                            ReactTooltip.hide(this.fooRef4);
+                          }}
+                        >
                           <span
-                              className="glyphicon glyphicon-info-sign"
-                              ref={ref => (this.fooRef4 = ref)}
-                              style={{
-                                marginRight: '4px',
-                                display: 'inline',
-                                width: '14px',
-                                float: 'left',
-                              }}
-                              data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
-                            />
-                        </label>
-                          <div
-                          style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
+                            className="glyphicon glyphicon-info-sign"
+                            ref={(ref) => (this.fooRef4 = ref)}
+                            style={{
+                              marginRight: "4px",
+                              display: "inline",
+                              width: "14px",
+                              float: "left",
                             }}
-                          >
+                            data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
+                          />
+                        </label>
+                        <div
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                        >
                           Authorship information (orig. script):
                         </div>
 
-                          <FormControl
+                        <FormControl
                           type="text"
                           placeholder=""
                           inputRef={(obj) => {
-                              this.input = obj;
-                            }}
+                            this.input = obj;
+                          }}
                           id="copTitle"
                           name="copTitle"
                           onFocus={this.focusInput}
                           onChange={this.handleInput}
                           value={copTitle}
-                          />
-                        </React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <FormControl
-                            type="text"
-                            validationState={this.validateAuthorship()}
-                            placeholder="Surname, given name"
-                            inputRef={(obj) => {
-                              this.input = obj;
-                            }}
-                            style={{
-                              border:
+                        />
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <FormControl
+                          type="text"
+                          validationState={this.validateAuthorship()}
+                          placeholder="Surname, given name"
+                          inputRef={(obj) => {
+                            this.input = obj;
+                          }}
+                          style={{
+                            border:
                               persName || creatorList.length > 0
-                                ? '1px solid black'
-                                : '1px solid #ff1a1a',
-                            }}
-                            id="persName"
-                            name="persName"
-                            onFocus={this.focusInput}
-                            onChange={this.handleInput}
-                            value={persName}
-                          />
+                                ? "1px solid black"
+                                : "1px solid #ff1a1a",
+                          }}
+                          id="persName"
+                          name="persName"
+                          onFocus={this.focusInput}
+                          onChange={this.handleInput}
+                          value={persName}
+                        />
 
-                          <label
+                        <label
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                          onMouseOver={() => {
+                            ReactTooltip.show(this.fooRef5);
+                          }}
+                          onMouseOut={() => {
+                            ReactTooltip.hide(this.fooRef5);
+                          }}
+                        >
+                          <span
+                            className="glyphicon glyphicon-info-sign"
+                            ref={(ref) => (this.fooRef5 = ref)}
                             style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
+                              marginRight: "4px",
+                              display: "inline",
+                              width: "14px",
+                              float: "left",
                             }}
-                            onMouseOver={() => {
-                              ReactTooltip.show(this.fooRef5);
-                            }}
-                            onMouseOut={() => {
-                              ReactTooltip.hide(this.fooRef5);
-                            }}
-                          >
-                            <span
-                              className="glyphicon glyphicon-info-sign"
-                              ref={ref => (this.fooRef5 = ref)}
-                              style={{
-                                marginRight: '4px',
-                                display: 'inline',
-                                width: '14px',
-                                float: 'left',
-                              }}
-                              data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
-                            />
-                          </label>
-                          <div
-                            style={{
-                              marginRight: '4px',
-                              display: 'inline',
-                              float: 'left',
-                            }}
-                          >
+                            data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
+                          />
+                        </label>
+                        <div
+                          style={{
+                            marginRight: "4px",
+                            display: "inline",
+                            float: "left",
+                          }}
+                        >
                           Authorship information (orig. script):
-                          </div>
+                        </div>
 
-                          <FormControl
-                            type="text"
-                            placeholder=""
-                            inputRef={(obj) => {
-                              this.input = obj;
-                            }}
-                            id="surName"
-                            name="surName"
-                            onFocus={this.focusInput}
-                            onChange={this.handleInput}
-                            value={surName}
-                          />
-                        </React.Fragment>
-                      )}
+                        <FormControl
+                          type="text"
+                          placeholder=""
+                          inputRef={(obj) => {
+                            this.input = obj;
+                          }}
+                          id="surName"
+                          name="surName"
+                          onFocus={this.focusInput}
+                          onChange={this.handleInput}
+                          value={surName}
+                        />
+                      </React.Fragment>
+                    )}
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddItem}
                       disabled={!persName && !collTitle}
                     >
@@ -1184,7 +1165,7 @@ class NewCollection extends Component {
                     </button>
                     {this.state.creatorList.length > 0 && (
                       <ul className="firstChildSpecial">
-                        {this.state.creatorList.map(item => (
+                        {this.state.creatorList.map((item) => (
                           <AuthorshipItem
                             id={item.id}
                             htmlText={item.htmlText}
@@ -1203,9 +1184,9 @@ class NewCollection extends Component {
                   >
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef6);
@@ -1216,22 +1197,22 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef6 = ref)}
+                        ref={(ref) => (this.fooRef6 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="The name of the entity that holds, archives, publishes, prints, distributes, releases, issues or produces the resource. This property will be used to formulate the citation. If resource is in Chinese/Japanese/Korean etc.: please put Latin transcription here (Pinyin, Hepbun etc.)"
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
-                        color: publisher ? 'black' : 'red',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
+                        color: publisher ? "black" : "red",
                       }}
                     >
                       *Publisher (Latin alphabet):
@@ -1246,8 +1227,8 @@ class NewCollection extends Component {
                       }}
                       style={{
                         border: publisher
-                          ? '1px solid black'
-                          : '1px solid #ff1a1a',
+                          ? "1px solid black"
+                          : "1px solid #ff1a1a",
                       }}
                       id="publisher"
                       name="publisher"
@@ -1265,21 +1246,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef7 = ref)}
+                        ref={(ref) => (this.fooRef7 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="if applicable: same information in original script, e.g. Chinese, Japanese, Korean script."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Publisher (orig. script):
@@ -1299,9 +1280,9 @@ class NewCollection extends Component {
                     />
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef8);
@@ -1312,21 +1293,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef8 = ref)}
+                        ref={(ref) => (this.fooRef8 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Date when the data is made publicly available."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Publication date [YYYY-MM-DD]:
@@ -1352,9 +1333,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef9);
@@ -1365,21 +1346,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef9 = ref)}
+                        ref={(ref) => (this.fooRef9 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Subject headings help to describe and categorize the web resource. The headings should conform to a list drawn from the Library of Congress, see http://id.loc.gov/authorities/subjects.html."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Subject headings (in English):
@@ -1400,8 +1381,8 @@ class NewCollection extends Component {
 
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddSubject}
                       disabled={!subjectHeadingText}
                     >
@@ -1409,7 +1390,7 @@ class NewCollection extends Component {
                     </button>
                     {this.state.subjectHeaderList.length > 0 && (
                       <ul className="firstChildSpecial">
-                        {this.state.subjectHeaderList.map(item => (
+                        {this.state.subjectHeaderList.map((item) => (
                           <PersonHeading
                             id={item.id}
                             htmlText={item.htmlText}
@@ -1423,9 +1404,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef10);
@@ -1436,21 +1417,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef10 = ref)}
+                        ref={(ref) => (this.fooRef10 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="Adding person headings allows for expanding the catalogue entry by the persons the web resource focuses on."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Person headings:
@@ -1470,8 +1451,8 @@ class NewCollection extends Component {
                     />
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ float: 'right' }}
+                      class="btn btn-success"
+                      style={{ float: "right" }}
                       onClick={this.onAddPerson}
                       disabled={!personHeadingText}
                     >
@@ -1480,7 +1461,7 @@ class NewCollection extends Component {
 
                     {this.state.personHeaderList.length > 0 && (
                       <ul className="firstChildSpecial">
-                        {this.state.personHeaderList.map(item => (
+                        {this.state.personHeaderList.map((item) => (
                           <PersonHeading
                             id={item.id}
                             htmlText={item.htmlText}
@@ -1496,9 +1477,9 @@ class NewCollection extends Component {
                   <FormGroup id="fieldset">
                     <label
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                       onMouseOver={() => {
                         ReactTooltip.show(this.fooRef11);
@@ -1509,21 +1490,21 @@ class NewCollection extends Component {
                     >
                       <span
                         className="glyphicon glyphicon-info-sign"
-                        ref={ref => (this.fooRef11 = ref)}
+                        ref={(ref) => (this.fooRef11 = ref)}
                         style={{
-                          marginRight: '4px',
-                          display: 'inline',
-                          width: '14px',
-                          float: 'left',
+                          marginRight: "4px",
+                          display: "inline",
+                          width: "14px",
+                          float: "left",
                         }}
                         data-tip="If you have comments for the DACHS team you can post them here."
                       />
                     </label>
                     <div
                       style={{
-                        marginRight: '4px',
-                        display: 'inline',
-                        float: 'left',
+                        marginRight: "4px",
+                        display: "inline",
+                        float: "left",
                       }}
                     >
                       Note to DACHS team:
@@ -1555,8 +1536,7 @@ class NewCollection extends Component {
                       />
                       <div className="progress-readout">{`${
                         progress || 0
-                      }%`}
-                      </div>
+                      }%`}</div>
                     </div>
                     {status && <p>{status}</p>}
                   </React.Fragment>
@@ -1573,7 +1553,7 @@ class NewCollection extends Component {
                 !title ||
                 !publisher ||
                 (creatingCollection && !error) ||
-                (selectedGroupName === 'corporate/institutional name'
+                (selectedGroupName === "corporate/institutional name"
                   ? !(collTitle || creatorList.length > 0)
                   : !(persName || creatorList.length > 0))
               }

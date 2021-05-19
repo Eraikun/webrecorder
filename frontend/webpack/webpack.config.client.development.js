@@ -4,8 +4,6 @@ import CircularDependencyPlugin from 'circular-dependency-plugin';
 import fs from 'fs';
 import merge from 'webpack-merge';
 import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import ESLintPlugin from 'eslint-webpack-plugin';
 
 import config from '../src/config';
 import getBaseConfig from './webpack.config.client';
@@ -24,14 +22,22 @@ const devConfig = {
     main: [
       `webpack-hot-middleware/client?path=http://${host}:${port}/__webpack_hmr&quiet=true`,
       './config/polyfills',
-      'bootstrap-loader',
       './src/client.js'
     ]
   },
 
   module: {
     rules: [
-     
+      {
+        enforce: 'pre',
+        test: /\.(js|jsx)?$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          cache: true,
+          quiet: true
+        }
+      },
       {
         test: /\.scss$/,
         use: [
@@ -97,16 +103,21 @@ const devConfig = {
     ]
   },
 
+  resolve: {
+    alias: {
+      'react-dom$': 'react-dom/profiling',
+      'scheduler/tracing': 'scheduler/tracing-profiling'
+    }
+  },
+
   output: {
     publicPath: `http://${host}:${port}${baseConfig.output.publicPath}`
   },
 
   plugins: [
-    new MiniCssExtractPlugin(),
-    new ESLintPlugin(),
     new CopyWebpackPlugin([
-      'src/shared/images/favicon.png',
-      'src/shared/images/webrecorder-social.png'
+      'src/shared/images/favicon.ico',
+      'src/shared/images/conifer-social.jpg'
     ]),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
