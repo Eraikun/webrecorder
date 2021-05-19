@@ -107,7 +107,6 @@ class UserManagementUI extends PureComponent {
 
   openReview = (evt) => {
     evt.preventDefault();
-    const {auth}= this.props;
     const user = auth.get("user");
     const username = user.get("username");
     window.location.href = `${config.appHost}/${username}/review`;

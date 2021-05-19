@@ -41,6 +41,8 @@ browser_req_url: 'http://shepherd:9020/api/request/{browser}'
 browser_list_url: 'http://shepherd:9020/api/images/browser'
 browser_info_url: 'http://shepherd:9020/api/flock/{reqid}'
 
+browsertrix_url: 'http://browsertrix:8000/crawls'
+
 proxy_host: 'proxy'
 
 all_archives_index: './webarchives.yaml'
@@ -99,7 +101,7 @@ email_sender: $EMAIL_SENDER
 email_smtp_url: $EMAIL_SMTP_URL
 
 metadata:
-    product: Webrecorder
+    product: Conifer
     type: default
 
 # Default Descriptions
@@ -117,14 +119,14 @@ default_coll:
     id: 'default-collection'
     title: 'Default Collection'
     desc: |
-        *Vielen Dank, dass Sie sich für das Opendach enschieden haben!*
+        *This is your first collection!*
 
-        Bitte klicken Sie auf Aufnahme beginnen, um
+        Each collection contains pages you’ve captured using Conifer.
 
-        Webseiten zu einer Archivierungsanfrage hinzuzufügen.
+        To add to this collection you can capture more pages.
 
-        Anschließend beenden und Sie die Aufnahme und wir erstellen die DOI.
-        
+        You can make lists and add text to provide information about one or more pages in your collection.
+
 upload_coll:
     id: 'uploaded-collection'
     title: 'Uploaded Collection'
@@ -235,5 +237,3 @@ enable_memento: true
 framed_replay: true
 
 query_html: time_info.html
-
-

@@ -6,57 +6,103 @@ $md: 768px;
 $lg: 992px;
 $xl: 1200px;
 
+$bs-button-interactive: "&:not(:disabled):not(.disabled):active, &:not(:disabled):not(.disabled):active:focus, &:focus, &:hover";
+
 /* fonts */
-$font-size-base: 1.4rem;
-$serif: "InknutAntiqua";
+$serif: "GZA";
 $sans: "HKGrotesk";
 
 $mobile: 375px;
 
 /* colors */
 $collTrigger: rgb(0, 57, 229);
-$blue: #0000ee;
-$blue-deselect: #B4C1F5;
-$dark-blue: #0129C4;
-$bookmarkListDefault: rgb(100,100,100);
-$brightGreen: #45A109;
-$bright-green-highlight: #56BB13;
+
+$pine: #dcedc9;
+$pine-accent: #c8d5bb;
+$pine-deselect: rgba($pine, 0.5);
+$dusty-pine: #c0c2a3;
+$deep-pine: #676c5b;
+$vivid-pine: #869a5d;
+$matcha: #94a073;
+$dried-needle: #ccae83;
+$pine-sap: #ecd289;
+$pine-nut: #ffe0b3;
+$redwood: #fe9b7e;
+
+$cf-danger: #ef613b;
+$cf-warning: #f8d677;
+$cf-success: #26451f;
+
+$dark-blue: #0129c4;
+$bookmarkListDefault: rgb(100, 100, 100);
+$brightGreen: $vivid-pine;
 $buttonHover: #ececec;
-$gray200: #F6F6F6;
-$gray300: #EEEEEE;
-$gray350: #D8D8D8;
-$gray400: #E0E0E0;
-$gray500: #CECECE;
-$gray525: #9B9B9B;
+$gray200: #f6f6f6;
+$gray300: #eeeeee;
+$gray350: #d8d8d8;
+$gray400: #e0e0e0;
+$gray500: #cecece;
+$gray525: #9b9b9b;
 $gray550: #7e7e7e;
-$gray600: #6E6E6E;
-$body-gray: #3E3E3E;
+$gray600: #6e6e6e;
+$gray650: #636363;
+$gray700: #5c5c5c;
+$gray800: #545454;
+$gray900: #3c3a3a;
+$body-gray: #3e3e3e;
+$slate: #3e3e3e;
 $header: #373944;
 $link: #337ab7;
-$linkHover: #74B9F3;
-$listsBlue: #72D1FE;
-$listsYellow: #F9FF95;
+$linkHover: #74b9f3;
+$listsBlue: #72d1fe;
+$blue: #72d1fe;
+$listsYellow: #f9ff95;
 $mgmt-gray: #979797;
-$sidebarBg: #FFF;
-$slate: #8F9294;
-$success-color: #7ED321;
-$tableHeaderBg: #E0E0E0; //gray400
-$tr-selected: #BABAC4;
-$tr-highlight-selected: #0A0A97;
-$white: #FFF;
+$sidebarBg: #fff;
+$success-color: #26451f;
+$tableHeaderBg: #e0e0e0; //gray400
+$tr-selected: #babac4;
+$tr-highlight-selected: $dusty-pine;
+$white: #fff;
 $black: #000;
 $yellow: rgb(255, 252, 108);
 $warning: #d9534f;
-$lightWarning: #FFF0F0;
-$lightBlue: #F2F2FF;
+$lightWarning: #fff0f0;
+$lightBlue: #f2f2ff;
+$bright-green-highlight: #72fed1;
+$blue-deselect: #f2f2ff;
 
-$table-zebra: #F6F6F6; //gray200
+$table-zebra: #f6f6f6; //gray200
 
-$sidebarHeaderBg: #EDEDED;
-$sidebarHeaderLabel: #6E6E6E;
+$sidebarHeaderBg: #ededed;
+$sidebarHeaderLabel: #6e6e6e;
 
 /* css delays */
 $quickShift: 125ms;
 $midShift: 200ms;
 $slowShift: 300ms;
 $tableRowFade: 150ms;
+
+@function rem($size) {
+  /*
+        scale rems from legacy base 10 to base 16
+
+        regex to replace old settings
+        find: (:|\s)([0-9.]+rem)(;|\s)
+        repl: $1rem($2)$3
+    */
+  @return $size * 0.625;
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == "number" and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+@function b16($size) {
+  /* scale units from px to base 16 rem */
+  @return strip-unit($size) * 0.0625rem;
+}

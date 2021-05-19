@@ -12,18 +12,12 @@ import ApiClient from './helpers/ApiClient';
 import baseRoute from './baseRoute';
 import Root from './root';
 
-//import './bootstrap/css/bootstrap.min.css';
-//import './bootstrap/js/bootstrap.min.js';
 import './base.scss';
 
 
 const client = new ApiClient();
 
 const dest = document.getElementById('app');
-const script = document.createElement("script");
-script.async = true;
-script.src = "http://127.0.0.1:8096/static/main-ce6d544a4ec204f36b27.js";
-document.head.appendChild(script);
 window.wrAppContainer = dest;
 
 // eslint-disable-next-line no-underscore-dangle

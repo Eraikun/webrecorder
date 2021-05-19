@@ -108,7 +108,10 @@ class CollectionHeaderUI extends Component {
 
   toggleDatModal = () => {
     this.setState({ datShare: !this.state.datShare });
-  };toggleSessionSave = () => {this.setState({ modalSessionSave: !this.state.modalSessionSave });};
+  }
+  toggleSessionSave = () => {
+	  this.setState({ modalSessionSave: !this.state.modalSessionSave });
+	}
   sendArchive = () => {
     const { collection, history } = this.props;
     history.push('/_warcsent');
@@ -211,7 +214,7 @@ class CollectionHeaderUI extends Component {
             </Modal>
           }
                 {/*<DropdownButton id="coll-menu" noCaret className="rounded" title={<MoreIcon />}>
-
+                
                   <MenuItem onClick={this.newSession}>New Session</MenuItem>
                   <MenuItem divider />
                   <MenuItem onClick={this.togglePublicView}>Cover</MenuItem>

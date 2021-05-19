@@ -96,7 +96,7 @@ class TestApiUserLogin(FullStackTests):
         with patch('cork.Mailer.send_email', self.mock_send_reg_email):
             res = self.testapp.post_json('/api/v1/auth/register', params=params)
 
-        assert res.json == {'success': 'A confirmation e-mail has been sent to <b>someuser</b>. Please '
+        assert res.json == {'success': 'A confirmation e-mail has been sent to <b>test@example.com</b>. Please '
                                        'check your e-mail to complete the registration!'}
 
     def test_api_val_reg_fail_no_cookie(self):
@@ -502,7 +502,8 @@ class TestApiUserLogin(FullStackTests):
         assert 'WARC/1.0' in downloads['get']['responses']['200']['content']['application/warc']['schema']['example']
 
         get_responses = get.get('responses', {}).get('200', {})
-        assert json.dumps(get_responses) == json.dumps(wr_api_spec.all_responses['wasapi_list'])
+        assert get_responses == wr_api_spec.all_responses['wasapi_list']
+        #assert json.dumps(get_responses) == json.dumps(wr_api_spec.all_responses['wasapi_list'])
 
     def test_invalid_api(self):
         # unknown api
@@ -523,4 +524,3 @@ class TestApiUserLogin(FullStackTests):
         assert self.testapp.get('/unk/v1', status=404).json == {'error': 'no_such_user'}
         assert self.testapp.get('/unk/', status=404).json == {'error': 'no_such_user'}
         assert self.testapp.get('/unk', status=404).json == {'error': 'no_such_user'}
-

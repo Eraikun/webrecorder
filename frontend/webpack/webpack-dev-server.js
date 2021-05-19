@@ -1,9 +1,6 @@
 import Express from 'express';
 import webpack from 'webpack';
 
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-
 import webpackConfig from './webpack.config.client.development';
 
 
@@ -18,7 +15,7 @@ const serverOptions = {
   noInfo: true,
   inline: true,
   publicPath: webpackConfig.output.publicPath,
-  headers: { 'Access-Control-Allow-Origin': '*', 'default-src': 'unsafe inline' },
+  headers: { 'Access-Control-Allow-Origin': '*' },
   stats: { colors: true },
   watchOptions: {
     aggregateTimeout: 300,
@@ -28,15 +25,13 @@ const serverOptions = {
 
 const app = new Express();
 
-//app.use(require('webpack-dev-middleware')(compiler, serverOptions));
-//app.use(require('webpack-hot-middleware')(compiler));
+app.use(require('webpack-dev-middleware')(compiler, serverOptions));
+app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(webpackDevMiddleware(compiler, {stats: { colors: true },headers: { 'Access-Control-Allow-Origin': '*' },contentBase: `http://${host}:${port}`,publicPath:webpackConfig.output.publicPath,serverSideRender:true, hot: true, overlay: false	}));
-app.use(webpackHotMiddleware(compiler));
 app.listen(port, (err) => {
   if (err) {
     console.error(err);
   } else {
-    console.info('==> 🚧  My OverlayFalse HotReload Webpack development server listening on port %s', port);
+    console.info('==> 🚧  Webpack development server listening on port %s', port);
   }
 });
