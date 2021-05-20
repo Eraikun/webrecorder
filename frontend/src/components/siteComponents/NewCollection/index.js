@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Toggle from "react-toggle";
-import { Alert, ControlLabel, FormGroup, FormControl } from "react-bootstrap";
+import Alert from 'react-bootstrap/Alert';
+import FormGroup from 'react-bootstrap/FormGroup';
+import FormControl from 'react-bootstrap/FormControl';
 import { incrementCollCount } from "store/modules/auth";
 
 import { defaultCollectionTitle, apiPath } from "config";
@@ -666,7 +668,7 @@ class NewCollection extends Component {
                       *Your e-mail address:
                     </div>
 
-                    <ControlLabel srOnly>email address:</ControlLabel>
+                    <p>email address:</p>
                     <FormControl
                       style={{
                         border: emailValid
@@ -926,7 +928,7 @@ class NewCollection extends Component {
                       *Projektcode (to join arcives under a topic ):
                     </div>
 
-                    <ControlLabel srOnly>projektcode:</ControlLabel>
+                    <p >projektcode:</p>
                     <FormControl
                       style={{
                         border: projektcodeValid
@@ -1002,7 +1004,7 @@ class NewCollection extends Component {
                         this.state.groupSelect = ref;
                       }}
                       onChange={this.groupSelect}
-                    >
+                    />
                       {this.state.creatorLegend.map((group) => (
                         <option
                           key={group}
@@ -1012,7 +1014,7 @@ class NewCollection extends Component {
                           {group}
                         </option>
                       ))}
-                    </FormControl>
+                    
                     {this.state.selectedGroupName ==
                     "corporate/institutional name" ? (
                       <React.Fragment>
@@ -1510,7 +1512,7 @@ class NewCollection extends Component {
                       Note to DACHS team:
                     </div>
 
-                    <ControlLabel srOnly>Note to DACHS team:</ControlLabel>
+                    <p >Note to DACHS team:</p>
                     <textarea
                       className="form-control"
                       rows="3"
