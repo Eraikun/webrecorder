@@ -106,6 +106,7 @@ class UserManagementUI extends PureComponent {
   };
 
   openReview = (evt) => {
+    const { auth } = this.props;
     evt.preventDefault();
     const user = auth.get("user");
     const username = user.get("username");
