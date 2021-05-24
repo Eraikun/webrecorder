@@ -13,6 +13,7 @@ import { UserIcon } from "components/icons";
 
 import config from "config";
 
+import LoginForm from "./loginForm";
 import ContactForm from "./contactForm";
 import "./style.scss";
 
@@ -69,6 +70,10 @@ class UserManagementUI extends PureComponent {
   }
 
   showContactForm = () => {
+    // how tu du dis
+  };
+
+  showLogin = () => {
     this.props.showModal(true);
   };
 
@@ -106,8 +111,8 @@ class UserManagementUI extends PureComponent {
   };
 
   openReview = (evt) => {
-    const { auth } = this.props;
     evt.preventDefault();
+    const { auth } = this.props;
     const user = auth.get("user");
     const username = user.get("username");
     window.location.href = `${config.appHost}/${username}/review`;
@@ -137,7 +142,7 @@ class UserManagementUI extends PureComponent {
     const { formError } = this.state;
 
     const form = (
-      <ContactForm
+      <LoginForm
         anonCTA={anonCTA}
         auth={auth}
         cb={this.save}
@@ -213,7 +218,7 @@ class UserManagementUI extends PureComponent {
               <li>
                 <button
                   className="rounded login-link"
-                  onClick={this.showContactForm}
+                  onClick={this.showLogin}
                   type="button"
                 >
                   Login
