@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Alert, Button, Col, Form, FormGroup, FormControl, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Form, FormGroup, FormControl, ControlLabel, Row } from 'react-bootstrap';
 
 import { guestSessionTimeout, product, userRegex } from 'config';
 import { login } from 'helpers/userMessaging';
@@ -86,20 +86,24 @@ class ContactForm extends Component {
           <Form id="loginform" onSubmit={this.save}>
             <FormGroup
               key="username" controlId="formName">
+              <ControlLabel>Name:</ControlLabel>
               <FormControl aria-label="name" onChange={this.handleChange} value={name} type="text" id="name" name="name" className="form-control" placeholder="Enter your name" required autoFocus />
               <div className="help-block with-errors" />
             </FormGroup>
 
             <FormGroup key="email" controlId="formEmail">
+              <ControlLabel>E-mail:</ControlLabel>
               <FormControl aria-label="email" onChange={this.handleChange} value={email} type="email" id="email" name="email" className="form-control" placeholder="name@example.com" required />
             </FormGroup>
 
             <FormGroup key="subject" controlId="formSubject">
+              <ControlLabel>Subject:</ControlLabel>
               <FormControl aria-label="subject" onChange={this.handleChange} value={subject} type="text" id="subject" name="subject" className="form-control" placeholder="What do you need help with?" required />
             </FormGroup>
 
             <FormGroup key="message" controlId="formMessage">
-              <FormControl as="textarea" rows={5} aria-label="message" onChange={this.handleChange} value={message} type="text" id="message" name="message" className="form-control" placeholder="Please describe your issue." required />
+              <ControlLabel>Message:</ControlLabel>
+              <FormControl componentClass="textarea" rows={4} aria-label="message" onChange={this.handleChange} value={message} id="msg" name="msg" className="form-control" placeholder="Please describe your issue." required />
             </FormGroup>
 
             {/*<FormGroup key="remember">
