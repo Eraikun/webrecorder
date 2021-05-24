@@ -13,7 +13,7 @@ fi
 cp "$sample" "$target"
 
 function set_key {
-    key=$(python -c "import os; import base64; print(base64.b32encode(os.urandom(75)))")
+    key=$(python3 -c "import os; import base64; print(base64.b32encode(os.urandom(75)))")
     sed -i'' -e "s/$1=.*/$1=$key/g" "$target"
 }
 
